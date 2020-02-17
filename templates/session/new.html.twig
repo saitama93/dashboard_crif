@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Nouvelle session
+{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<h1>Créer une nouvelle session</h1>
+
+		{{ form_start(form) }}
+		{{ form_widget(form) }}
+		<button type="submit" class="btn btn-primary">Ajouter</button>
+		{{ form_end(form) }}
+
+	</div>
+{% endblock %}

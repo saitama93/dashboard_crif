@@ -2,9 +2,10 @@
 
 namespace App\DataFixtures;
 
-use App\Entity\Classroom;
 use App\Entity\Intern;
 use App\Entity\Session;
+use App\Entity\Classroom;
+use Cocur\Slugify\Slugify;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
@@ -23,10 +24,12 @@ class AppFixtures extends Fixture
         $faker = \Faker\Factory::create('fr_FR');
         $sexes = ['male', 'female'];
         $className = ['A1', 'A2', 'B1', 'B2', 'ILL'];
+        $slugify = new Slugify();
 
-        for ($i = 0; $i < 5; $i++) {
+        for ($i = 1; $i < 5; $i++) {
             $session = new Session();
-            $session->setName("Session n°" . $i);
+            $session->setName("Session n°" . $i)
+                ->setSlug($slugify->slugify("Session n°" . $i));
             $em->persist($session);
 
             for ($j = 0; $j < 10; $j++) {
