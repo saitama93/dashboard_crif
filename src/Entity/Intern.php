@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -51,6 +52,38 @@ class Intern
      */
     private $classroom;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
+    /**
+     * Affiche le nom complet
+     *
+     * @return void
+     */
+    public function getFullName()
+    {
+        return "{$this->firstName} " . strtoupper("{$this->lastName}");
+    }
+
+    /**
+     * Initialise le slug
+     * 
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * 
+     * @return void 
+     */
+    public function initializeSlug()
+    {
+        if (empty($this->slug)) {
+
+            $slugify =  new Slugify();
+            $this->slug = $slugify->slugify($this->firstName . ' ' . $this->lastName);
+        }
+    }
+    
     public function getId(): ?int
     {
         return $this->id;
@@ -136,6 +169,18 @@ class Intern
     public function setClassroom(?Classroom $classroom): self
     {
         $this->classroom = $classroom;
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

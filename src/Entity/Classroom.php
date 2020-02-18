@@ -2,12 +2,18 @@
 
 namespace App\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
+use Cocur\Slugify\Slugify;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClassroomRepository")
+ * @UniqueEntity(
+ * fields={"name"},
+ * message="Ce nom de classe est déjà pris veuillez en choisir un autre")
  */
 class Classroom
 {
@@ -48,6 +54,28 @@ class Classroom
      * @ORM\OneToMany(targetEntity="App\Entity\Intern", mappedBy="classroom")
      */
     private $interns;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $slug;
+
+    /**
+     * Initialise le slug
+     * 
+     * @ORM\PrePersist
+     * @ORM\PreUpdate
+     * 
+     * @return void 
+     */
+    public function initializeSlug()
+    {
+        if (empty($this->slug)) {
+
+            $slugify =  new Slugify();
+            $this->slug = $slugify->slugify($this->name);
+        }
+    }
 
     public function __construct()
     {
@@ -146,6 +174,18 @@ class Classroom
                 $intern->setClassroom(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

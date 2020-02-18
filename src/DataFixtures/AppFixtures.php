@@ -42,6 +42,7 @@ class AppFixtures extends Fixture
                     ->setCapacity(12)
                     ->setStartAt($date_start)
                     ->setEndAt($date_end)
+                    ->setSlug($slugify->slugify($classRoom->getName()))
                     ->setSession($session);
                 $em->persist($classRoom);
 
@@ -52,6 +53,7 @@ class AppFixtures extends Fixture
                         ->setLastName($faker->lastName($sexe))
                         ->setEmail($faker->email())
                         ->setPhone($faker->phoneNumber())
+                        ->setSlug($slugify->slugify($intern->getFullName()))
                         ->setAge(mt_rand(18, 50))
                         ->setSexe($sexe)
                         ->setClassroom($classRoom);

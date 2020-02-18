@@ -51,7 +51,6 @@ class SessionController extends AbstractController
                 "La session <strong>{$session->getName()}</strong> a bien été supprimé"
             );
         }
-
         return $this->redirectToRoute("session_index");
     }
 
