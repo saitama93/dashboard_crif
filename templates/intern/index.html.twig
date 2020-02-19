@@ -1,0 +1,59 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+	Liste des stagiaires
+{% endblock %}
+
+{% block body %}
+	<div class="my-5 container-fluid">
+		<div class="d-flex justify-content-between align-items-center">
+
+			<h1>Liste des stagiaires</h1>
+			<a href="#" class="btn btn-success">Ajouter un stagiaire</a>
+		</div>
+
+		<table class="table table-hover">
+			<thead>
+				<th>Nom</th>
+				<th>Email</th>
+				<th>Sexe</th>
+				<th class="text-center">Tel</th>
+				<th class="text-center">Age</th>
+				<th class="text-center">Classe</th>
+				<th></th>
+			</thead>
+
+			<tbody>
+
+				{% for intern in interns %}
+					<tr>
+						<td>{{intern.fullName}}</td>
+						<td>{{intern.email}}</td>
+						<td>
+							{% if intern.sexe == "male" %}
+								Homme
+							{% else %}
+								Femme
+							{% endif %}
+						</td>
+						<td class="text-center">{{intern.phone}}</td>
+						<td class="text-center">{{intern.age}}</td>
+						<td class="text-center">{{intern.classroom.name}}</td>
+						<td class="d-flex justify-content-between align-items-center">
+							<a href="#" class="btn btn-primary">
+
+								<i class="fas fa-edit"></i>
+							</a>
+							<a href="{{ path('intern_delete', {'slug' : intern.slug}) }}" class="btn btn-danger">
+
+								<i class="fas fa-trash"></i>
+							</a>
+						</td>
+
+					</tr>
+				{% endfor %}
+
+			</tbody>
+		</table>
+	</div>
+{% endblock %}
