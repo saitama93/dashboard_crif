@@ -11,9 +11,6 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ClassroomRepository")
- * @UniqueEntity(
- * fields={"name"},
- * message="Ce nom de classe est déjà pris veuillez en choisir un autre")
  */
 class Classroom
 {
@@ -36,11 +33,13 @@ class Classroom
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan("today", message="La date de début doit être ultérieure à la date d'aujourd'hui !")
      */
     private $startAt;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\GreaterThan(propertyPath="startAt", message="La date de fin doit être plus éloignée que la date de début.")
      */
     private $endAt;
 

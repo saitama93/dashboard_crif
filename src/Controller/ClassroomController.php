@@ -31,7 +31,7 @@ class ClassroomController extends AbstractController
     /**
      * Permet de supprimer une classe
      * 
-     * @Route("/classroom/{id}/delete", name="classroom_delete")
+     * @Route("/classroom/{slug}/delete", name="classroom_delete")
      *
      * @param Classroom $classroom
      * @param EntityManagerInterface $em
@@ -50,11 +50,44 @@ class ClassroomController extends AbstractController
             $em->flush();
 
             $this->addFlash(
-                'success',
+                'danger',
                 "La session <strong>{$classroom->getName()}</strong> a bien été supprimé"
             );
         }
         return $this->redirectToRoute("classroom_index");
+    }
+    /**
+     * Permet de modifier une classe
+     * 
+     * @Route("/classroom/{id}/edit", name="classroom_edit")
+     *
+     * @param Classroom $classroom
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @return Response
+     */
+    public function edit(Classroom $classroom, Request $request, EntityManagerInterface $em)
+    {
+
+        $form = $this->createForm(ClassroomType::class, $classroom);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->persist($classroom);
+            $em->flush();
+
+            $this->addFlash(
+                'success',
+                "La classe <strong>{$classroom->getName()}</strong> a bien été modifiée"
+            );
+
+            return $this->redirectToRoute("classroom_index");
+        }
+
+        return $this->render('classroom/edit.html.twig', [
+            'form' => $form->createView(),
+            'classRoom' => $classroom
+        ]);
     }
 
     /**

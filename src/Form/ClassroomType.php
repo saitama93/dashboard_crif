@@ -6,7 +6,7 @@ use App\Entity\Classroom;
 use App\Entity\Session;
 use App\Form\ApplicationType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -17,7 +17,7 @@ class ClassroomType extends ApplicationType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name', TextType::class, $this->getConfiguration("Nom de la classe", "Saisir le nom de la classe"))
+            ->add('name', TextType::class, $this->getConfiguration("Nom de la classe", "Ex: A1.S1"))
             ->add('capacity', IntegerType::class, $this->getConfiguration("Nombre de place", "Saisir le nombre de place", [
                 'attr' => [
                     'min' => 1,
@@ -25,11 +25,15 @@ class ClassroomType extends ApplicationType
                     'step' => 1
                 ]
             ]))
-            ->add('startAt', DateTimeType::class, $this->getConfiguration("Date de début", "Saisir la date de début"))
-            ->add('endAt', DateTimeType::class, $this->getConfiguration("Date de fint", "Saisir la date de fin"))
+            ->add('startAt', DateType::class, $this->getConfiguration("Date de début", "Saisir la date de début", [
+                "widget" => "single_text"
+            ]))
+            ->add('endAt', DateType::class, $this->getConfiguration("Date de fint", "Saisir la date de fin", [
+                "widget" => "single_text"
+            ]))
             ->add('session', EntityType::class, [
                 'class' => Session::class,
-                'choice_label' => function ($session){
+                'choice_label' => function ($session) {
                     return $session->getName();
                 }
             ]);
